@@ -1,0 +1,63 @@
+1. Inštálácia django do pythonu:
+    pip install django
+    pip list 
+        Package  Version
+        -------- -------
+        asgiref  3.8.1
+        Django   5.1.1
+        pip      24.2
+        sqlparse 0.5.1
+        tzdata   2024.2
+
+2. vytvorenie django projektu:
+    django-admin startproject nazov_projektu .  
+
+3. nastavenie slovenčiny:
+    myside/settings.py
+
+        LANGUAGE_CODE = 'sk'
+
+        TIME_ZONE = 'Europe/Bratislava'
+
+4. spustenie vývojového servera
+    python manage.py runserver
+
+5. vytvorenie aplikácie v projekte:
+    python manage.py startapp nazov_aplikácie 
+
+6. zaregistrovanie aplikácie do projektu (mysite/settings.py)
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'skuska',
+    ]
+
+7. vytvoriť jednoduché views (skuska/viws.py):
+    from django.shortcuts import render
+    from django.http import HttpResponse
+
+    def index(request):
+        return HttpResponse('Hello world!')
+
+8. vytvoriť urlpattern:
+    8.1 mysite/urls.py
+
+            from django.contrib import admin
+            from django.urls import path, include
+
+            urlpatterns = [
+            path('admin/', admin.site.urls),
+            path('skuska/', include('skuska.urls')),
+        ]
+    8.2 
+    - vytvoriť súbor urls.py v skuska (priečinok aplikácie)
+            from django.urls import path, include
+            from . import views 
+
+            urlpatterns = [
+            path('', views.index, name='index'),
+            ]
