@@ -1,0 +1,112 @@
+9.1 vytvorit v aplikacii priecinok a podpriecinok templates/nazov_aplikacie a v nom subor html subor (napr. index.html)
+
+    <!DOCTYPE html>
+    <html lang="sk">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>Kalkulacka</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            <input type="text" name="a">
+            <select name="operation">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
+            <input type="text" name="b">
+            <button type="submit">odoslat</button>
+        </form>
+        <h2>{{vysledok}}</h2>
+        
+    </body>
+    </html>
+
+    9.2 uprav views.py pre aplikaciu
+
+        from django.shortcuts import render
+
+    # Create your views here.
+    def index(request):
+        vysledok = 0
+        if (request.method == "GET"):
+            vysledok = 0
+
+        if (request.method == "POST"):
+            a = int(request.POST['a'])
+            b = int(request.POST['b'])
+            operation = request.POST['operation']
+            if (operation == "+"):
+                vysledok = a + b
+            elif (operation == "-"):
+                vysledok = a - b
+            elif (operation == "*"):
+                vysledok = a * b
+            elif (operation == "/"):
+                if (b == 0):
+                    vysledok = "Nemozes delit 0"
+                else:
+                    vysledok = a / b
+            else:
+                vysledok = 0
+
+        return render(request, 'skuska/index.html' , dict(vysledok=vysledok))
+
+----------------------------------------------------------------------------------------------------
+
+
+
+from django.shortcuts import render
+from django.http import HttpResponse
+import math
+
+def index(request):
+    if request.method == "GET":
+
+        vysledok = 0
+
+    elif request.method == "POST":
+
+        a = int(request.POST["a"])
+        b = int(request.POST["b"])
+        operator = request.POST["operator"]
+
+        if operator == "+":
+            vysledok = a + b
+
+
+        elif operator == "":
+            vysledok = a b
+
+
+        elif operator == "-":
+            if a > b:
+                vysledok = a - b
+            else:
+                vysledok = b - a
+
+        elif operator == "/":
+            if b == 0:
+                vysledok =("Ty si kretenio neda sa delit nulou ty nula!")
+            else:
+                vysledok = a / b
+
+        elif operator == "^":
+            if a > b:
+                vysledok = a * a 
+            else:
+                vysledok = b * b
+
+        elif operator == "√":
+            if a > b and a != 0:
+                vysledok = math.sqrt(a)
+            elif a < b and b != 0:
+                vysledok = math.sqrt(b)
+
+
+
+    return render(request, "skuska/index.html" , dict(vysledok = vysledok))
