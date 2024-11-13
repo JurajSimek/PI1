@@ -42,3 +42,5 @@ sutek = Ucitel("Michal", "Šutek", 1978, "Mgr.", "III.AT")
 sutek.pozdrav()
 palica = Ucitel("Michal", "Palica", 1985, "Mgr.")
 palica.pozdrav()
+
+#du mena 5 učitelou a žiakov s náhodnými menami a uloží ich do pola 
