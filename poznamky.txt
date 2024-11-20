@@ -1,6 +1,6 @@
-1. Inštálácia django do pythonu:
+1. Inštalácia django do python:
     pip install django
-    pip list 
+    pip list
         Package  Version
         -------- -------
         asgiref  3.8.1
@@ -10,12 +10,12 @@
         tzdata   2024.2
 
 2. vytvorenie django projektu:
-    django-admin startproject nazov_projektu .  
+    django-admin startproject nazov_projektu .
 
 3. nastavenie slovenčiny:
-    myside/settings.py
+    mysite/settings.py
 
-        LANGUAGE_CODE = 'sk'
+        LANGUAGE_CODE = 'en-us'
 
         TIME_ZONE = 'Europe/Bratislava'
 
@@ -23,9 +23,9 @@
     python manage.py runserver
 
 5. vytvorenie aplikácie v projekte:
-    python manage.py startapp nazov_aplikácie 
+    python manage.py startapp nazov_aplikacie
 
-6. zaregistrovanie aplikácie do projektu (mysite/settings.py)
+6. zaregistrovanie aplikácie do projektu (mysite/settings.py):
     INSTALLED_APPS = [
         'django.contrib.admin',
         'django.contrib.auth',
@@ -35,8 +35,7 @@
         'django.contrib.staticfiles',
         'skuska',
     ]
-
-7. vytvoriť jednoduché views (skuska/viws.py):
+7. vytvoriť jednoduché views (skuska/views.py):
     from django.shortcuts import render
     from django.http import HttpResponse
 
@@ -46,18 +45,73 @@
 8. vytvoriť urlpattern:
     8.1 mysite/urls.py
 
-            from django.contrib import admin
-            from django.urls import path, include
+        from django.contrib import admin
+        from django.urls import path, include
 
-            urlpatterns = [
+        urlpatterns = [
             path('admin/', admin.site.urls),
             path('skuska/', include('skuska.urls')),
-        ]
-    8.2 
+        ]    
+    
+    8.2
     - vytvoriť súbor urls.py v skuska (priečinok aplikácie)
-            from django.urls import path, include
-            from . import views 
+    - upraviť urls.py:
+from django.urls import path
+from . import views
 
-            urlpatterns = [
-            path('', views.index, name='index'),
-            ]
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+9. Template
+9.1 Vytvoriť v aplikácii priečinok templates/nazov_aplikacie a v ňom nejaký html súbor(napr. index.html)
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulačka</title>
+</head>
+<body>
+    <h1>Kalkulačka</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="a">
+        <select name="operator">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="text" name="b">
+        <input type="submit">
+    </form>
+    <h2>{{vysledok}}</h2>
+    
+</body>
+</html>
+
+9.2 upraviť views:
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def index(request):
+    if request.method == "GET":
+        vysledok = 0
+    if request.method == "POST":
+        a = int(request.POST["a"])
+        b = int(request.POST["b"])
+        operator = request.POST["operator"]
+        if operator == "+":
+            vysledok = a + b
+        elif operator == "-":
+            vysledok = a - b
+        elif operator == "*":
+            vysledok = a * b
+        else:
+            vysledok = a / b
+
+    return render(request, 'skuska/index.html', dict(vysledok=vysledok))
+
+# Create your views here.
+
